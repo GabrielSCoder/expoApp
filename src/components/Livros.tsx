@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { getLivros } from '../services/requisicoes';
 import { Link } from 'expo-router';
+import { useSession } from './Contexto'; 
 
 function Livros() {
     const [dados, setDados] = useState([]);
@@ -58,21 +59,15 @@ function Livros() {
                 ) : null
         
                 return (
-                    <Link href={{ pathname: "/livro/[id]", params: { id: item.id }}} asChild>
-                        <Pressable>
-                            <View className="flex flex-row bg-white mt-2">
-                                <View className='pl-2 '>
-                                    {modLink ? (
-                                        <Image width={80} height={80} source={{uri :modLink}} className="my-2 mr-6"/>
-                                    ) : ""}
-                                </View>
-                                <View className='items-star justify-center'>
-                                    <Text numberOfLines={2} className="font-bold ml-2 text-xs max-w-[90%]">{item.titulo}</Text>
-                                    <Text numberOfLines={2} className="font-xs text-slate-600 ml-2 max-w-[90%] text-xs flex-shrink">{item.autor}</Text>
-                                </View>
+                    <Link href={{ pathname: "/livro/[id]", params: { id: item.id }}} className="bg-white rounded-md shadow-md m-3 p-2" asChild>
+                        <Pressable className='flex-row'>
+                            <Image source={{uri :modLink}} className="w-24 h-36" resizeMode="cover" />
+                            <View className='flex-1 pl-2'>
+                                <Text className="font-bold text-md" >{item.titulo}</Text>
+                                <Text className='text-xs'>{item.autor}</Text>
                             </View>
                         </Pressable>
-                    </Link>
+                     </Link>
                 );
             }}
             keyExtractor={(item) => item.id.toString()}

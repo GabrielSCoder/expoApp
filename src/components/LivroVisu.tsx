@@ -3,9 +3,11 @@ import { getLivro } from "../services/requisicoes";
 import livro from "../types/livro";
 import {View, Text, Image , ScrollView, SafeAreaView} from 'react-native'
 import { TextInput } from "react-native-gesture-handler";
+import { useSession } from "./Contexto";
 
 export default function LivroVisu() {
     const [dados, setDados] = useState<livro>(null)
+    const {session} = useSession()
 
     useEffect(() => {
         getLivro("80", setDados)

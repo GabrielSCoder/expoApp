@@ -1,17 +1,17 @@
-import Livros from "../../components/Livros";
-import LoginForm from "../LoginForm";
+import Livros from "../components/Livros";
+import LoginForm from "./LoginForm";
 import { SafeAreaView} from "react-native-safe-area-context";
 import { Text, View } from "react-native";
-import Header from "../../components/Header";
+import Header from "../components/Header";
 
 
-function LivrosShow() {
+function log() {
     return (
         <View className="bg-gray-200 h-full">
             <Header />
-            <Livros />
+            <LoginForm />
         </View>
     )
 }
 
-export default LivrosShow
+export default log

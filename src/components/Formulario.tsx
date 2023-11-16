@@ -1,22 +1,25 @@
 import { View, Button, Text, TextInput } from "react-native";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import login from "../types/login";
+import { useSession } from "./Contexto";
 import { doLogin } from "../services/requisicoes";
 import { router } from 'expo-router';
+import * as SecureStore from 'expo-secure-store'
 
 export default function Formulario() {
 
+    const {session, signIn} = useSession()
+
     const {control, reset, handleSubmit} = useForm({
         defaultValues : {
-            "login" : "",
-            "senha" : ""
+            "login" : "estagiario@gmail.com",
+            "senha" : "Estagio@123"
         }
     })
 
-    const setToken = async (token:string) => {
+    const setUser = async (user:string) => {
         try {
-            await AsyncStorage.setItem('token', token)
+            await SecureStore.setItemAsync('usuario', user)
             //console.log('deu certo')
         } catch (error) {
             //console.log("deu ruim")
@@ -24,11 +27,8 @@ export default function Formulario() {
         }
     }
 
-    const onSubmit = async (data) => {
-        const {login, senha} = data
-        const resp = await doLogin(login, senha)
-        await setToken(resp.token)
-        await router.replace('/livros');
+    const onSubmit = (data) => {
+        signIn(data)
     }
 
     return (
