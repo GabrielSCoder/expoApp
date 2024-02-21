@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { setStorageItemAsync, useStorageState } from './UseStorage';
 import { getItemAsync, setItemAsync } from 'expo-secure-store';
 import { router } from 'expo-router';
-import { doLogin, tokenValidate } from '../services/requisicoes';
+import { doLogin, tokenValidate, pegarDadosColaborador } from '../services/requisicoes';
 
 const AuthContext = React.createContext<{ signIn: (token:string) => void; signOut: () => void; session?: string | null, isLoading: boolean } | null>(null);
 
@@ -30,6 +30,8 @@ export function SessionProvider(props: React.PropsWithChildren) {
         setSession(res.token);
         setStorageItemAsync('token', res.token)
         setStorageItemAsync('nome', res.nome)
+        const resp = await pegarDadosColaborador()
+        setStorageItemAsync('idColaborador', String(resp.data.dados.colaboradorId))
       }
     } catch(error) {
       console.error(error)
@@ -47,10 +49,12 @@ export function SessionProvider(props: React.PropsWithChildren) {
     const validate = await tokenValidate(token)
 
     if (validate) {
+      setSession(validate.data.dados.token)
+      setStorageItemAsync('token', validate.data.dados.token)
       router.replace('/')
     } else {
       signOut()
-      //console.log("sem token")
+      console.log("sem token") 
     }
   }
 
